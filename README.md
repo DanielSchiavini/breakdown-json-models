@@ -8,20 +8,22 @@ These models are able to validate themselves according to the rules you define.
 To create a new model, you must extend the `Model` class and add some fields to it.
 For example:
 ```typescript
+import Model, {property, fields} from 'breakdown-json-models'
+
 class TestModel extends Model {
-    @property(StringField.create('The title').asRequired())
+    @property(fields.StringField.create('The title').asRequired())
     public title: string;
 
-    @property(ListField.of(StringField.create('Some strings')))
+    @property(fields.ListField.of(fields.StringField.create('Some strings')))
     public strings: string[];
 
-    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
+    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(EnumField.of(ExampleEnum, 'An enum'))
+    @property(fields.EnumField.of(fields.ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
 
-    constructor(properties?: ModelProperties) {
+    constructor(properties?) {
         super();
         this.populate(properties);
     }
