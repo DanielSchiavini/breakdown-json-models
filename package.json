@@ -1,0 +1,57 @@
+{
+  "name": "breakdown-model",
+  "version": "1.0.0",
+  "description": "BreakDown model",
+  "author": "The BreakDown Company",
+  "license": "ISC",
+  "repository": "https://gitlab.com/DanielSchiavini/breakdown",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "test:run": "nyc node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
+    "test:lint": "tslint --project ./tsconfig.json src/**/*.ts",
+    "test": "npm run test:run && npm run test:lint"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts"
+    ],
+    "reporter": [
+      "text",
+      "text-summary",
+      "html"
+    ],
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100,
+    "check-coverage": true,
+    "sourceMap": true,
+    "instrument": true,
+    "all": true
+  },
+  "dependencies": {
+    "tslib": "^1.9.3",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/jasmine": "^3.3.13",
+    "@types/node": "^11.13.11",
+    "eslint": "^5.15.3",
+    "jasmine": "^3.4.0",
+    "nyc": "^14.1.1",
+    "tslint": "^5.16.0"
+  }
+}
