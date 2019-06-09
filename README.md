@@ -4,6 +4,9 @@ BreakDown Models
 This is a TypeScript library that allows you to create strong-typed models for your application.
 These models are able to validate themselves according to the rules you define.
 
+Note that to achieve this we use the typescript [experimental decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
+which may include breaking changes in future releases.
+
 ## Creating models
 To create a new model, you must extend the `Model` class and add some fields to it.
 For example:

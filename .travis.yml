@@ -10,5 +10,4 @@ deploy:
   email: $NPM_DEPLOY_EMAIL
   api_key: $NPM_DEPLOY_KEY
   on:
-    branch: github
-    #TODO: use instead: tags: true
+    tags: true
