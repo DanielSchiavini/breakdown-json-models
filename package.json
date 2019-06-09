@@ -5,7 +5,8 @@
   "author": "Daniel Schiavini",
   "license": "GPL",
   "repository": "https://github.com/DanielSchiavini/breakdown-json-models",
-  "private": true,
+  "private": false,
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "test:run": "nyc node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
