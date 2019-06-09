@@ -1,0 +1,8 @@
+node_modules/
+coverage/
+.nyc_output/
+.idea/
+.travis.yml
+*.spec.*
+tsconfig.json
+tslint.json

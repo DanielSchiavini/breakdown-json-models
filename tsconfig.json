@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2018",
+    "outDir": "dist",
+    // Warn on expressions and declarations with an implied 'any' type
     "noImplicitAny": false,
+    // Generates corresponding '.map' file
     "sourceMap": true,
-    "allowJs": true,
+    // generate .d.ts definitions files
+    "declaration": true,
     // Enable support for decorators
     "experimentalDecorators": true,
     // Enable support for importing CommonJS modules targeting es6 modules
@@ -14,9 +18,10 @@
     "allowSyntheticDefaultImports": true
   },
   "exclude": [
-    "node_modules/**/*"
+    "dist",
+    "node_modules"
   ],
   "include": [
-    "src/**/*"
+    "src"
   ]
 }
