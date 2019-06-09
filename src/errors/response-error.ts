@@ -18,11 +18,4 @@ export default class ResponseError extends Error {
         super(`Error ${code}: ${title} ` + JSON.stringify({meta}));
         this.meta = meta;
     }
-
-    /**
-     * Gets the HTTP status that should be returned for this error.
-     */
-    get httpStatus(): number {
-        return this.status;
-    }
 }

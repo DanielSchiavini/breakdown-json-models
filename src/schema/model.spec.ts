@@ -4,7 +4,6 @@ import EnumField from '../fields/enum-field';
 import ListField from '../fields/list-field';
 import {fieldRequired, invalidEnumValue, invalidType} from '../errors/validation-errors';
 import EmbeddedField from '../fields/embedded-field';
-import {makeJsonBody} from '../utils/json';
 import property from '../fields/property';
 
 enum ExampleEnum {
@@ -138,7 +137,7 @@ describe('Models', () => {
     });
 
     it('converts to JSON properly', () => {
-        expect(makeJsonBody(new TestModel({title: 'title'}))).toEqual('{\n' +
+        expect(JSON.stringify({data: new TestModel({title: 'title'}).serialize()}, null, 2)).toEqual('{\n' +
             '  "data": {\n' +
             '    "title": "title",\n' +
             '    "state": "TWO"\n' +
@@ -147,7 +146,7 @@ describe('Models', () => {
     });
 
     it('converts as array to JSON properly', () => {
-        expect(makeJsonBody([new TestModel({title: 'title'})])).toEqual('{\n' +
+        expect(JSON.stringify({data: [new TestModel({title: 'title'}).serialize()]}, null, 2)).toEqual('{\n' +
             '  "data": [\n' +
             '    {\n' +
             '      "title": "title",\n' +
