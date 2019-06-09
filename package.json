@@ -1,10 +1,10 @@
 {
-  "name": "breakdown-model",
-  "version": "1.0.0",
-  "description": "BreakDown model",
-  "author": "The BreakDown Company",
-  "license": "ISC",
-  "repository": "https://gitlab.com/DanielSchiavini/breakdown",
+  "name": "breakdown-json-models",
+  "version": "0.1.0",
+  "description": "BreakDown JSON model framework",
+  "author": "Daniel Schiavini",
+  "license": "GPL",
+  "repository": "https://github.com/DanielSchiavini/breakdown-json-models",
   "private": true,
   "scripts": {
     "build": "tsc --build tsconfig.json",
