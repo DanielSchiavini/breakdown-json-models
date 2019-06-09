@@ -4,12 +4,11 @@ import EnumField from './fields/enum-field';
 import ListField from './fields/list-field';
 import StringField from './fields/string-field';
 import Field from './fields/field';
-import Model, {ModelProperties} from './schema/model';
+import Model, {ModelProperties, ModelConstructor} from './schema/model';
 import property from './fields/property';
 
 const fields = {EmbeddedField, EnumField, ListField, StringField, Field};
 const validation = {ValidationError, invalidEnumValue, fieldRequired, invalidType};
-type Properties = ModelProperties;
 
 export default Model;
 export {
@@ -17,5 +16,6 @@ export {
     fields,
     property,
     Model,
-    Properties,
+    ModelProperties,
+    ModelConstructor
 };

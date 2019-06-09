@@ -4,5 +4,6 @@ coverage/
 .idea/
 .travis.yml
 *.spec.*
+jasmine.json
 tsconfig.json
 tslint.json

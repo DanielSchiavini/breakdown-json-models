@@ -7,6 +7,10 @@ These models are able to validate themselves according to the rules you define.
 Note that to achieve this we use the typescript [experimental decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
 which may include breaking changes in future releases.
 
+[![Build Status](https://travis-ci.com/DanielSchiavini/breakdown-json-models.svg?branch=master)](https://travis-ci.com/DanielSchiavini/breakdown-json-models)
+
+We enforce 100% branch coverage in any code merged.
+
 ## Creating models
 To create a new model, you must extend the `Model` class and add some fields to it.
 For example:
