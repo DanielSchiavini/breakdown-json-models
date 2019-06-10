@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "12"
+
+before_deploy:
+  - npm run build
+
+deploy:
+  provider: npm
+  email: $NPM_DEPLOY_EMAIL
+  api_key: $NPM_DEPLOY_KEY
+  on:
+    tags: true

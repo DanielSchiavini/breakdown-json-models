@@ -4,24 +4,33 @@ BreakDown Models
 This is a TypeScript library that allows you to create strong-typed models for your application.
 These models are able to validate themselves according to the rules you define.
 
+Note that to achieve this we use the typescript [experimental decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
+which may include breaking changes in future releases.
+
+[![Build Status](https://travis-ci.com/DanielSchiavini/breakdown-json-models.svg?branch=master)](https://travis-ci.com/DanielSchiavini/breakdown-json-models)
+
+We enforce 100% branch coverage in any code merged.
+
 ## Creating models
 To create a new model, you must extend the `Model` class and add some fields to it.
 For example:
 ```typescript
+import Model, {property, fields} from 'breakdown-json-models'
+
 class TestModel extends Model {
-    @property(StringField.create('The title').asRequired())
+    @property(fields.StringField.create('The title').asRequired())
     public title: string;
 
-    @property(ListField.of(StringField.create('Some strings')))
+    @property(fields.ListField.of(fields.StringField.create('Some strings')))
     public strings: string[];
 
-    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
+    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(EnumField.of(ExampleEnum, 'An enum'))
+    @property(fields.EnumField.of(fields.ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
 
-    constructor(properties?: ModelProperties) {
+    constructor(properties?) {
         super();
         this.populate(properties);
     }

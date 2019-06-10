@@ -1,11 +1,4 @@
-import Model, {ModelProperties} from './model';
-import StringField from '../fields/string-field';
-import EnumField from '../fields/enum-field';
-import ListField from '../fields/list-field';
-import {fieldRequired, invalidEnumValue, invalidType} from '../errors/validation-errors';
-import EmbeddedField from '../fields/embedded-field';
-import {makeJsonBody} from '../utils/json';
-import property from '../fields/property';
+import Model, {fields, validation, property} from '..';
 
 enum ExampleEnum {
     ONE = 'one',
@@ -13,32 +6,32 @@ enum ExampleEnum {
 }
 
 class TestModel extends Model {
-    @property(StringField.create('The title').asRequired())
+    @property(fields.StringField.create('The title').asRequired())
     public title: string;
 
-    @property(ListField.of(StringField.create('Some strings')))
+    @property(fields.ListField.of(fields.StringField.create('Some strings')))
     public strings: string[];
 
-    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
+    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(EnumField.of(ExampleEnum, 'An enum'))
+    @property(fields.EnumField.of(ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
 
-    constructor(properties?: ModelProperties) {
+    constructor(properties?) {
         super();
         this.populate(properties);
     }
 }
 
 class AnotherTestModel extends Model {
-    @property(ListField.of(EnumField.of(ExampleEnum, 'A list of enums')))
+    @property(fields.ListField.of(fields.EnumField.of(ExampleEnum, 'A list of enums')))
     public state: ExampleEnum;
 
-    @property(StringField.create('A description field'))
+    @property(fields.StringField.create('A description field'))
     public description = 'default description';
 
-    constructor(properties?: ModelProperties) {
+    constructor(properties?) {
         super();
         this.populate(properties);
     }
@@ -110,35 +103,35 @@ describe('Models', () => {
     });
 
     it('should validate on creation', () => {
-        expect(() => new TestModel({state: 'invalid'})).toThrow(invalidEnumValue('state', 'invalid'));
+        expect(() => new TestModel({state: 'invalid'})).toThrow(validation.invalidEnumValue('state', 'invalid'));
     });
 
     it('should check required fields on get', () => {
-        expect(() => new TestModel().title).toThrow(fieldRequired('title'));
+        expect(() => new TestModel().title).toThrow(validation.fieldRequired('title'));
     });
 
     it('should check the value is a string', () => {
-        expect(() => new TestModel({title: 2})).toThrow(invalidType('title', 0));
+        expect(() => new TestModel({title: 2})).toThrow(validation.invalidType('title', 0));
     });
 
     it('should check the value is a list', () => {
-        expect(() => new TestModel({strings: 2})).toThrow(invalidType('strings', 0));
+        expect(() => new TestModel({strings: 2})).toThrow(validation.invalidType('strings', 0));
     });
 
     it('should check the value is an object', () => {
         const model = new TestModel({title: 'a'});
-        expect(() => model.populate({testModels: [1]})).toThrow(invalidType('testModels[0]', 0));
+        expect(() => model.populate({testModels: [1]})).toThrow(validation.invalidType('testModels[0]', 0));
     });
 
     it('validates on set', () => {
         const model = new TestModel();
         // @ts-ignore
-        expect(() => model.state = 'invalid').toThrow(invalidEnumValue('state', 'invalid'));
-        expect(() => model.title = null).toThrow(fieldRequired('title'));
+        expect(() => model.state = 'invalid').toThrow(validation.invalidEnumValue('state', 'invalid'));
+        expect(() => model.title = null).toThrow(validation.fieldRequired('title'));
     });
 
     it('converts to JSON properly', () => {
-        expect(makeJsonBody(new TestModel({title: 'title'}))).toEqual('{\n' +
+        expect(JSON.stringify({data: new TestModel({title: 'title'}).serialize()}, null, 2)).toEqual('{\n' +
             '  "data": {\n' +
             '    "title": "title",\n' +
             '    "state": "TWO"\n' +
@@ -147,7 +140,7 @@ describe('Models', () => {
     });
 
     it('converts as array to JSON properly', () => {
-        expect(makeJsonBody([new TestModel({title: 'title'})])).toEqual('{\n' +
+        expect(JSON.stringify({data: [new TestModel({title: 'title'}).serialize()]}, null, 2)).toEqual('{\n' +
             '  "data": [\n' +
             '    {\n' +
             '      "title": "title",\n' +

@@ -16,7 +16,7 @@ export default abstract class Model {
     /** The data of the model */
     private readonly $data: Mapping<any> = {};
 
-    constructor() {
+    protected constructor() {
         this.defineProperties();
     }
 

@@ -1,11 +1,13 @@
 {
-  "name": "breakdown-model",
-  "version": "1.0.0",
-  "description": "BreakDown model",
-  "author": "The BreakDown Company",
-  "license": "ISC",
-  "repository": "https://gitlab.com/DanielSchiavini/breakdown",
-  "private": true,
+  "name": "breakdown-json-models",
+  "version": "0.1.6",
+  "description": "BreakDown JSON model framework",
+  "author": "Daniel Schiavini",
+  "license": "GPL",
+  "repository": "https://github.com/DanielSchiavini/breakdown-json-models",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "test:run": "nyc node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
@@ -40,11 +42,7 @@
     "instrument": true,
     "all": true
   },
-  "dependencies": {
-    "tslib": "^1.9.3",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.4.5"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/es6-promise": "^3.3.0",
     "@types/jasmine": "^3.3.13",
@@ -52,6 +50,9 @@
     "eslint": "^5.15.3",
     "jasmine": "^3.4.0",
     "nyc": "^14.1.1",
-    "tslint": "^5.16.0"
+    "tslint": "^5.16.0",
+    "tslib": "^1.9.3",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.4.5"
   }
 }
