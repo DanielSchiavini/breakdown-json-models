@@ -12,6 +12,9 @@ class TestModel extends Model {
     @property(fields.ListField.of(fields.StringField.create('Some strings')))
     public strings: string[];
 
+    @property(fields.UnionField.of(fields.NumberField.create('A number'), fields.ObjectField.create('An object')))
+    public either: object | number;
+
     @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
@@ -96,14 +99,27 @@ describe('Models', () => {
 
         const model = new TestModel();
         model.testModels = [];
-        expect(Object.keys(model)).toEqual(['title', 'strings', 'testModels', 'state']);
-        expect(Object.getOwnPropertyNames(model)).toEqual(['$data', 'title', 'strings', 'testModels', 'state']);
-
+        expect(Object.keys(model)).toEqual(['title', 'strings', 'either', 'testModels', 'state']);
+        expect(Object.getOwnPropertyNames(model)).toEqual([
+            '$data', 'title', 'strings', 'either', 'testModels', 'state'
+        ]);
         expect(Object.keys(new AnotherTestModel())).toEqual(['state', 'description']);
     });
 
-    it('should validate on creation', () => {
-        expect(() => new TestModel({state: 'invalid'})).toThrow(validation.invalidEnumValue('state', 'invalid'));
+    it('should accept values on the first type of the either field', () => {
+        const model = new TestModel({title: 'model with an object'});
+        model.either = {an: 'object'};
+        expect(model.serialize()).toEqual({either: {an: 'object'}, title: 'model with an object', state: 'TWO'});
+    });
+
+    it('should accept values on the second type of the either field', () => {
+        const model = new TestModel({title: 'model with an object'});
+        model.either = 2;
+        expect(model.serialize()).toEqual({either: 2, title: 'model with an object', state: 'TWO'});
+    });
+
+    it('should not accept values that are neither of the valid types', () => {
+        expect(() => new TestModel({either: 'invalid'})).toThrow(validation.invalidType('either', 'invalid'));
     });
 
     it('should check required fields on get', () => {
