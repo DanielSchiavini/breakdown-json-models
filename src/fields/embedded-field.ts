@@ -1,6 +1,4 @@
-import Field from './field';
-import Model, {ModelConstructor, ModelProperties} from '../schema/model';
-import {invalidType} from '../errors/validation-errors';
+import {Field, Model, ModelConstructor, ModelProperties, invalidType} from '..';
 
 /**
  * Creates a field that references another model.

@@ -1,7 +1,7 @@
 /**
  * Creates a field that can contains any of two types of field.
  */
-import Field from './field';
+import {Field} from '..';
 
 
 export default class UnionField<TExternal1, TExternal2, TInternal1, TInternal2>

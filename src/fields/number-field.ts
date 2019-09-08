@@ -1,5 +1,4 @@
-import Field from './field';
-import {invalidType} from '../errors/validation-errors';
+import {invalidType, Field} from '..';
 
 export default class NumberField extends Field<number> {
     protected constructor(description: string) {

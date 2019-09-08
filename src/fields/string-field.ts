@@ -1,5 +1,4 @@
-import Field from './field';
-import {invalidFormat, invalidType} from '../errors/validation-errors';
+import {Field, invalidFormat, invalidType} from '..';
 
 export default class StringField extends Field<string> {
     /**

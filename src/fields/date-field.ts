@@ -1,11 +1,10 @@
-import Field from './field';
-import {invalidType} from '../errors/validation-errors';
+import {Field, invalidFormat, invalidType} from '..';
 
 /**
  * A field containing a javascript Date object.
  */
 export default class DateField extends Field<Date> {
-    protected constructor(description: string, forceTimezone = '') {
+    protected constructor(description: string) {
         super(description);
     }
 
@@ -26,7 +25,14 @@ export default class DateField extends Field<Date> {
      * @throws ValidationError
      */
     set(key: string, value: any): Date {
-        if (value.isPrototypeOf(Date)) {
+        if (typeof value === 'string') {
+            const timestamp = Date.parse(value);
+            if (!timestamp) {
+                throw invalidFormat(key, value, 'ISO 8601');
+            }
+            value = new Date(timestamp);
+        }
+        if (value instanceof Date) {
             return value;
         }
         throw invalidType(key, value);
