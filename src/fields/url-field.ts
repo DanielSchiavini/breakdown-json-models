@@ -1,4 +1,4 @@
-import {StringField} from "..";
+import {StringField} from '..';
 
 /**
  * A field containing a string that must be have the format of a valid URL.

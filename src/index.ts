@@ -1,6 +1,6 @@
 import ResponseError from './errors/response-error';
 import {ValidationError, invalidEnumValue, fieldRequired, invalidType, invalidFormat} from './errors/validation-errors';
-import {forEachObject, transformObject, mapObject, Mapping} from "./utils/objects";
+import {forEachObject, transformObject, mapObject, Mapping} from './utils/objects';
 import Model, {ModelProperties, ModelConstructor} from './schema/model';
 import property from './fields/property';
 import Field from './fields/field';
@@ -11,8 +11,8 @@ import StringField from './fields/string-field';
 import ObjectField from './fields/object-field';
 import UnionField from './fields/union-field';
 import NumberField from './fields/number-field';
-import DateField from "./fields/date-field";
-import UrlField from "./fields/url-field";
+import DateField from './fields/date-field';
+import UrlField from './fields/url-field';
 
 export {
     // validation,
