@@ -21,6 +21,13 @@ export default abstract class Model {
     }
 
     /**
+     * Gets the name of the model.
+     */
+    getModelName(): string {
+        return this.constructor.name;
+    }
+
+    /**
      * Adds a new field to the class.
      * @param key The key of the field.
      * @param field The field.
@@ -90,5 +97,22 @@ export default abstract class Model {
             const value = this[key];
             return value == null ? null : field.serialize(key, value);
         });
+    }
+
+    /**
+     * Generates class documentation in yuml format {@link https://yuml.me/diagram/scruffy/class/draw}
+     */
+    yuml(): string {
+        const fieldDefs = [];
+        const references = [];
+        forEachObject(this.$fields, (field, key) => {
+            const [fieldDef, reference] = field.yuml(key)
+            fieldDefs.push(fieldDef);
+            if (reference) {
+                references.push(reference);
+            }
+        });
+        // TODO: add methods to fieldDefs
+        return [`[${this.getModelName()}|${fieldDefs.join(';')}]`, ...references].join(',');
     }
 }

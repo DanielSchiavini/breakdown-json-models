@@ -33,6 +33,24 @@ export function mapObject<TIn, TOut>(obj: Mapping<TIn>, fn: (value: TIn, key: st
 }
 
 /**
+ * Creates a new array with the results of calling the given function for each item in the object.
+ * If the function returns null or undefined, it will not be included in the resulting array.
+ * @param obj The object to iterate through.
+ * @param fn The function to call.
+ * @return An array with the results of the function calls.
+ */
+export function mapToArray<TIn, TOut>(obj: Mapping<TIn>, fn: (value: TIn, key: string) => TOut | null): TOut[] {
+    const result = [];
+    forEachObject(obj, (oldValue, key) => {
+        const newValue = fn(oldValue, key);
+        if (newValue != null) {
+            result.push(newValue);
+        }
+    });
+    return result;
+}
+
+/**
  * Creates a new object with the results of calling the given function for each item.
  * This is similar to {@link mapObject} but it allows for new keys in the resulting object.
  * @param obj The object to iterate through.

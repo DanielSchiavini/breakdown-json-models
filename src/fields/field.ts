@@ -42,6 +42,16 @@ export default abstract class Field<TExternal, TInternal = TExternal> {
     }
 
     /**
+     * Generates this field documentation in yuml format {@link https://yuml.me/diagram/scruffy/class/draw}
+     */
+    yuml(key: string): [string, string] {
+        return [`${key}:${this.typeName}`, this.yuml()];
+    }
+
+    abstract get yuml(): string;
+    abstract get typeName(): string;
+
+    /**
      * Parses and validates the given value, throwing an error if the value is invalid.
      * @param key The attribute name of the field in the model.
      * @param value The value to parse. It may be either the internal or the external type, but it should not be null.
