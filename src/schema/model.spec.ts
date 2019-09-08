@@ -1,24 +1,27 @@
-import Model, {fields, validation, property} from '..';
+import Model, {fields, property, validation} from '..';
 
 enum ExampleEnum {
     ONE = 'one',
     TWO = 'two',
 }
 
+const {EnumField, ObjectField, NumberField, UnionField, EmbeddedField, ListField, StringField} = fields;
+
+
 class TestModel extends Model {
-    @property(fields.StringField.create('The title').asRequired())
+    @property(StringField.create('The title').asRequired())
     public title: string;
 
-    @property(fields.ListField.of(fields.StringField.create('Some strings')))
+    @property(ListField.of(StringField.create('Some strings')))
     public strings: string[];
 
-    @property(fields.UnionField.of(fields.NumberField.create('A number'), fields.ObjectField.create('An object')))
+    @property(UnionField.of(NumberField.create('A number'), ObjectField.create('An object')))
     public either: object | number;
 
-    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
+    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(fields.EnumField.of(ExampleEnum, 'An enum'))
+    @property(EnumField.of(ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
 
     constructor(properties?) {
@@ -28,10 +31,10 @@ class TestModel extends Model {
 }
 
 class AnotherTestModel extends Model {
-    @property(fields.ListField.of(fields.EnumField.of(ExampleEnum, 'A list of enums')))
+    @property(ListField.of(EnumField.of(ExampleEnum, 'A list of enums')))
     public state: ExampleEnum;
 
-    @property(fields.StringField.create('A description field'))
+    @property(StringField.create('A description field'))
     public description = 'default description';
 
     constructor(properties?) {

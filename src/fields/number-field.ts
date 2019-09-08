@@ -2,7 +2,7 @@ import Field from './field';
 import {invalidType} from '../errors/validation-errors';
 
 export default class NumberField extends Field<number> {
-    private constructor(description: string) {
+    protected constructor(description: string) {
         super(description);
     }
 

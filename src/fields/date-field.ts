@@ -1,18 +1,21 @@
 import Field from './field';
 import {invalidType} from '../errors/validation-errors';
 
-export default class ListField<TExternal, TInternal = TExternal> extends Field<TExternal[], TInternal[]> {
-    protected constructor(private items: Field<TExternal, TInternal>, description: string) {
+/**
+ * A field containing a javascript Date object.
+ */
+export default class DateField extends Field<Date> {
+    protected constructor(description: string, forceTimezone = '') {
         super(description);
     }
 
     /**
-     * Creates a new list field.
-     * @param field The field schema of each of the items.
+     * Creates a new date field.
+     * @param description The description of the field.
      * @return The created field.
      */
-    static of<TExternal, TInternal>(field: Field<TExternal, TInternal>) {
-        return new ListField(field.asRequired(), field.description);
+    static create(description: string) {
+        return new DateField(description);
     }
 
     /**
@@ -22,9 +25,9 @@ export default class ListField<TExternal, TInternal = TExternal> extends Field<T
      * @return The parsed value.
      * @throws ValidationError
      */
-    set(key: string, value: (TExternal|TInternal)[] | null): TInternal[] {
-        if (Array.isArray(value)) {
-            return value.map((item, index) => this.items.set(`${key}[${index}]`, item));
+    set(key: string, value: any): Date {
+        if (value.isPrototypeOf(Date)) {
+            return value;
         }
         throw invalidType(key, value);
     }
@@ -36,7 +39,7 @@ export default class ListField<TExternal, TInternal = TExternal> extends Field<T
      * @return The parsed value.
      * @throws ValidationError
      */
-    serialize(key: string, value: TInternal[]): TExternal[] {
-        return value.map((item, index) => this.items.serialize(`${key}[${index}]`, item));
+    serialize(key: string, value: Date): Date {
+        return value;
     }
 }

@@ -7,7 +7,7 @@ import Field from './field';
 export default class UnionField<TExternal1, TExternal2, TInternal1, TInternal2>
     extends Field<TExternal1 | TExternal2, TInternal1 | TInternal2> {
 
-    private constructor(private fields: [Field<TExternal1, TInternal1>, Field<TExternal2, TInternal2>], description: string) {
+    protected constructor(private fields: [Field<TExternal1, TInternal1>, Field<TExternal2, TInternal2>], description: string) {
         super(description);
     }
 

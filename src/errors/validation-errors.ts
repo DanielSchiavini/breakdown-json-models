@@ -11,5 +11,9 @@ export const invalidEnumValue = (key: string, givenValue: any) =>
 export const fieldRequired = (key: string) =>
     new ValidationError(400, 'fieldRequired', 'The field is required.', {key});
 
+export const invalidFormat = (key: string, givenValue: any, expectedFormat: string) =>
+    new ValidationError(400, 'invalidFormat', 'The given value has an invalid format.',
+        {key, givenType: typeof givenValue, expectedFormat});
+
 export const invalidType = (key: string, givenValue: any) =>
     new ValidationError(400, 'invalidType', 'The given value has an invalid type.', {key, givenType: typeof givenValue});

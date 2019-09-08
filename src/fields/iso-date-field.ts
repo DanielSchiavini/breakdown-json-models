@@ -1,33 +1,21 @@
 import Field from './field';
 import {invalidFormat, invalidType} from '../errors/validation-errors';
 
-export default class StringField extends Field<string> {
-    /**
-     * Creates a new string field.
-     * @param description The description of the field.
-     * @param regex An optional regex to validate the field with.
-     */
-    protected constructor(description: string, private regex: RegExp = null) {
+/**
+ * A field containing a javascript Date object internally, that serializes to JSON ISO string.
+ */
+export default class IsoDateField extends Field<String, Date> {
+    protected constructor(description: string) {
         super(description);
     }
 
     /**
-     * Creates a new string field.
+     * Creates a new date field.
      * @param description The description of the field.
      * @return The created field.
      */
     static create(description: string) {
-        return new StringField(description);
-    }
-
-    /**
-     * Adds a regex validation to the string field.
-     * @param regex The regex to validate the field with.
-     * @return this
-     */
-    withRegex(regex: RegExp): this {
-        this.regex = regex;
-        return this;
+        return new IsoDateField(description);
     }
 
     /**
@@ -37,12 +25,16 @@ export default class StringField extends Field<string> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    set(key: string, value: any): string {
-        if (typeof value === 'string') {
-            if (this.regex && !this.regex.test(value)) {
-                throw invalidFormat(key, value, this.regex.toString());
+    set(key: string, value: any): Date {
+        if (value.isPrototypeOf(Date)) {
+            return value;
+        }
+        if (typeof value == 'string') {
+            const parsed = new Date(Date.parse(value));
+            if (!parsed) {
+                throw invalidFormat(key, value, 'ISO 8601 (e.g. "2019-08-30T23:59:00.171Z")');
             }
-            return value.trim();
+            return parsed;
         }
         throw invalidType(key, value);
     }
@@ -54,7 +46,7 @@ export default class StringField extends Field<string> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    serialize(key: string, value: string): string {
-        return value;
+    serialize(key: string, value: Date): string {
+        return value.toISOString();
     }
 }

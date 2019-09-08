@@ -6,7 +6,7 @@ import {invalidType} from '../errors/validation-errors';
  * Creates a field that references another model.
  */
 export default class EmbeddedField<TModel extends Model> extends Field<ModelProperties, TModel> {
-    private constructor(private model: ModelConstructor<TModel>, description: string) {
+    protected constructor(private model: ModelConstructor<TModel>, description: string) {
         super(description);
     }
 
