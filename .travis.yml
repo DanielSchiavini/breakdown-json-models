@@ -7,6 +7,7 @@ before_deploy:
 
 deploy:
   provider: npm
+  skip_cleanup: true
   email: $NPM_DEPLOY_EMAIL
   api_key: $NPM_DEPLOY_KEY
   on:
