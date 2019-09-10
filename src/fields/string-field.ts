@@ -1,8 +1,12 @@
-import Field from './field';
-import {invalidType} from '../errors/validation-errors';
+import {Field, invalidFormat, invalidType} from '..';
 
 export default class StringField extends Field<string> {
-    private constructor(description: string) {
+    /**
+     * Creates a new string field.
+     * @param description The description of the field.
+     * @param regex An optional regex to validate the field with.
+     */
+    protected constructor(description: string, private regex: RegExp = null) {
         super(description);
     }
 
@@ -16,6 +20,16 @@ export default class StringField extends Field<string> {
     }
 
     /**
+     * Adds a regex validation to the string field.
+     * @param regex The regex to validate the field with.
+     * @return this
+     */
+    withRegex(regex: RegExp): this {
+        this.regex = regex;
+        return this;
+    }
+
+    /**
      * Parses and validates the given value, throwing an error if the value is invalid.
      * @param key The attribute name of the field in the model.
      * @param value The value to parse. It may be either the internal or the external type, but it should not be null.
@@ -24,6 +38,9 @@ export default class StringField extends Field<string> {
      */
     set(key: string, value: any): string {
         if (typeof value === 'string') {
+            if (this.regex && !this.regex.test(value)) {
+                throw invalidFormat(key, value, this.regex.toString());
+            }
             return value.trim();
         }
         throw invalidType(key, value);

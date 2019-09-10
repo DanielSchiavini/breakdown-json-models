@@ -1,5 +1,4 @@
-import {forEachObject, mapObject, Mapping} from '../utils/objects';
-import Field from '../fields/field';
+import {forEachObject, mapObject, Mapping, Field} from '..';
 
 export interface ModelProperties extends Mapping<any> {}
 

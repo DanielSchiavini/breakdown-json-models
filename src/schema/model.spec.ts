@@ -1,25 +1,35 @@
-import Model, {fields, validation, property} from '..';
+import {
+    Model, property, EnumField, ObjectField, NumberField, UnionField, EmbeddedField, ListField, StringField,
+    UrlField, DateField, invalidType, fieldRequired, invalidEnumValue, invalidFormat
+} from '..';
 
 enum ExampleEnum {
     ONE = 'one',
     TWO = 'two',
 }
 
+
 class TestModel extends Model {
-    @property(fields.StringField.create('The title').asRequired())
+    @property(StringField.create('The title').asRequired().withRegex(/[\w ]+/))
     public title: string;
 
-    @property(fields.ListField.of(fields.StringField.create('Some strings')))
+    @property(ListField.of(StringField.create('Some strings')))
     public strings: string[];
 
-    @property(fields.UnionField.of(fields.NumberField.create('A number'), fields.ObjectField.create('An object')))
+    @property(UnionField.of(NumberField.create('A number'), ObjectField.create('An object')))
     public either: object | number;
 
-    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
+    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(fields.EnumField.of(ExampleEnum, 'An enum'))
+    @property(EnumField.of(ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
+
+    @property(DateField.create('A date'))
+    public date: Date;
+
+    @property(UrlField.create('An url'))
+    public url: string;
 
     constructor(properties?) {
         super();
@@ -28,10 +38,10 @@ class TestModel extends Model {
 }
 
 class AnotherTestModel extends Model {
-    @property(fields.ListField.of(fields.EnumField.of(ExampleEnum, 'A list of enums')))
+    @property(ListField.of(EnumField.of(ExampleEnum, 'A list of enums')))
     public state: ExampleEnum;
 
-    @property(fields.StringField.create('A description field'))
+    @property(StringField.create('A description field'))
     public description = 'default description';
 
     constructor(properties?) {
@@ -99,17 +109,24 @@ describe('Models', () => {
 
         const model = new TestModel();
         model.testModels = [];
-        expect(Object.keys(model)).toEqual(['title', 'strings', 'either', 'testModels', 'state']);
+        expect(Object.keys(model)).toEqual(['title', 'strings', 'either', 'testModels', 'state', 'date', 'url']);
         expect(Object.getOwnPropertyNames(model)).toEqual([
-            '$data', 'title', 'strings', 'either', 'testModels', 'state'
+            '$data', 'title', 'strings', 'either', 'testModels', 'state', 'date', 'url'
         ]);
         expect(Object.keys(new AnotherTestModel())).toEqual(['state', 'description']);
     });
 
     it('should accept values on the first type of the either field', () => {
-        const model = new TestModel({title: 'model with an object'});
+        const model = new TestModel({title: 'model with an object', url: 'http://localhost.local',
+            date: '2019-01-30T01:01:02.123Z'});
         model.either = {an: 'object'};
-        expect(model.serialize()).toEqual({either: {an: 'object'}, title: 'model with an object', state: 'TWO'});
+        expect(model.serialize()).toEqual({
+            either: {an: 'object'},
+            title: 'model with an object',
+            state: 'TWO',
+            date: new Date(Date.UTC(2019, 0, 30, 1, 1, 2, 123)),
+            url: 'http://localhost.local',
+        });
     });
 
     it('should accept values on the second type of the either field', () => {
@@ -119,31 +136,46 @@ describe('Models', () => {
     });
 
     it('should not accept values that are neither of the valid types', () => {
-        expect(() => new TestModel({either: 'invalid'})).toThrow(validation.invalidType('either', 'invalid'));
+        expect(() => new TestModel({either: 'invalid'})).toThrow(invalidType('either', 'invalid'));
     });
 
     it('should check required fields on get', () => {
-        expect(() => new TestModel().title).toThrow(validation.fieldRequired('title'));
+        expect(() => new TestModel().title).toThrow(fieldRequired('title'));
     });
 
     it('should check the value is a string', () => {
-        expect(() => new TestModel({title: 2})).toThrow(validation.invalidType('title', 0));
+        expect(() => new TestModel({title: 2})).toThrow(invalidType('title', 0));
     });
 
     it('should check the value is a list', () => {
-        expect(() => new TestModel({strings: 2})).toThrow(validation.invalidType('strings', 0));
+        expect(() => new TestModel({strings: 2})).toThrow(invalidType('strings', 0));
     });
 
     it('should check the value is an object', () => {
         const model = new TestModel({title: 'a'});
-        expect(() => model.populate({testModels: [1]})).toThrow(validation.invalidType('testModels[0]', 0));
+        expect(() => model.populate({testModels: [1]})).toThrow(invalidType('testModels[0]', 0));
+    });
+
+    it('should check the string is a valid date', () => {
+        const model = new TestModel({title: 'a'});
+        expect(() => model.populate({date: 'x'})).toThrow(invalidFormat('date', '', 'ISO 8601'));
+    });
+
+    it('should check the value is a date object', () => {
+        const model = new TestModel({title: 'a'});
+        expect(() => model.populate({date: []})).toThrow(invalidType('date', []));
+    });
+
+    it('should check the value is a valid URL', () => {
+        const model = new TestModel({title: 'a'});
+        expect(() => model.populate({url: '2019'})).toThrow(invalidFormat('url', '', UrlField.REGEX.toString()));
     });
 
     it('validates on set', () => {
         const model = new TestModel();
         // @ts-ignore
-        expect(() => model.state = 'invalid').toThrow(validation.invalidEnumValue('state', 'invalid'));
-        expect(() => model.title = null).toThrow(validation.fieldRequired('title'));
+        expect(() => model.state = 'invalid').toThrow(invalidEnumValue('state', 'invalid'));
+        expect(() => model.title = null).toThrow(fieldRequired('title'));
     });
 
     it('converts to JSON properly', () => {

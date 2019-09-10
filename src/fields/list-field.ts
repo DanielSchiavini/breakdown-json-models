@@ -1,8 +1,7 @@
-import Field from './field';
-import {invalidType} from '../errors/validation-errors';
+import {invalidType, Field} from '..';
 
 export default class ListField<TExternal, TInternal = TExternal> extends Field<TExternal[], TInternal[]> {
-    private constructor(private items: Field<TExternal, TInternal>, description: string) {
+    protected constructor(private items: Field<TExternal, TInternal>, description: string) {
         super(description);
     }
 

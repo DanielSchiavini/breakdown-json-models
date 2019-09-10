@@ -1,8 +1,11 @@
 /**
  * Defines an interface for all schema fields.
  */
-import {fieldRequired} from '../errors/validation-errors';
+import {fieldRequired} from '..';
 
+/**
+ *
+ */
 export default abstract class Field<TExternal, TInternal = TExternal> {
     /**
      * Creates a new field.

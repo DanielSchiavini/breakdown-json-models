@@ -1,12 +1,10 @@
-import Field from './field';
-import Model, {ModelConstructor, ModelProperties} from '../schema/model';
-import {invalidType} from '../errors/validation-errors';
+import {Field, Model, ModelConstructor, ModelProperties, invalidType} from '..';
 
 /**
  * Creates a field that references another model.
  */
 export default class EmbeddedField<TModel extends Model> extends Field<ModelProperties, TModel> {
-    private constructor(private model: ModelConstructor<TModel>, description: string) {
+    protected constructor(private model: ModelConstructor<TModel>, description: string) {
         super(description);
     }
 

@@ -1,17 +1,20 @@
-import {invalidType, Field} from '..';
+import {Field, invalidFormat, invalidType} from '..';
 
-export default class NumberField extends Field<number> {
+/**
+ * A field containing a javascript Date object.
+ */
+export default class DateField extends Field<Date> {
     protected constructor(description: string) {
         super(description);
     }
 
     /**
-     * Creates a new number field.
+     * Creates a new date field.
      * @param description The description of the field.
      * @return The created field.
      */
     static create(description: string) {
-        return new NumberField(description);
+        return new DateField(description);
     }
 
     /**
@@ -21,8 +24,15 @@ export default class NumberField extends Field<number> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    set(key: string, value: any): number {
-        if (typeof value === 'number') {
+    set(key: string, value: any): Date {
+        if (typeof value === 'string') {
+            const timestamp = Date.parse(value);
+            if (!timestamp) {
+                throw invalidFormat(key, value, 'ISO 8601');
+            }
+            value = new Date(timestamp);
+        }
+        if (value instanceof Date) {
             return value;
         }
         throw invalidType(key, value);
@@ -35,7 +45,7 @@ export default class NumberField extends Field<number> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    serialize(key: string, value: number): number {
+    serialize(key: string, value: Date): Date {
         return value;
     }
 }

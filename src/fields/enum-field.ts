@@ -1,6 +1,4 @@
-import Field from './field';
-import {invalidEnumValue} from '../errors/validation-errors';
-import {Mapping, transformObject} from '../utils/objects';
+import {Field, invalidEnumValue, Mapping, transformObject} from '..';
 
 /**
  * Class responsible for validating enum fields.

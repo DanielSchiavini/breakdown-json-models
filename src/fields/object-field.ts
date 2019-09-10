@@ -1,8 +1,7 @@
-import {invalidType} from '../errors/validation-errors';
-import Field from './field';
+import {invalidType, Field} from '..';
 
 export default class ObjectField extends Field<object> {
-    private constructor(description: string) {
+    protected constructor(description: string) {
         super(description);
     }
 

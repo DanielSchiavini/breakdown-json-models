@@ -1,9 +1,10 @@
-import Field from './field';
+import {Field} from '..';
 
 /**
  * Decorates a model property, making it delegate get and set methods to a
  * @param field: The field instance that specifies how the property should be validated.
- * @typeparam
+ * @typeparam TExternal The type of the field when serialized.
+ * @typeparam TInternal The type of the field in the application.
  * @return The decorator.
  */
 export default <TExternal, TInternal>(field: Field<TExternal, TInternal>): any =>
