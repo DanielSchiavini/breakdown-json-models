@@ -158,7 +158,7 @@ describe('Models', () => {
 
     it('should check the string is a valid date', () => {
         const model = new TestModel({title: 'a'});
-        expect(() => model.populate({date: 'x'})).toThrow(invalidFormat('date', '', 'ISO 8601'));
+        expect(() => model.populate({date: 'x'})).toThrow(invalidFormat('date', 'x', 'ISO 8601'));
     });
 
     it('should check the value is a date object', () => {
@@ -168,7 +168,7 @@ describe('Models', () => {
 
     it('should check the value is a valid URL', () => {
         const model = new TestModel({title: 'a'});
-        expect(() => model.populate({url: '2019'})).toThrow(invalidFormat('url', '', UrlField.REGEX.toString()));
+        expect(() => model.populate({url: '2019'})).toThrow(invalidFormat('url', '2019', UrlField.REGEX.toString()));
     });
 
     it('validates on set', () => {
