@@ -15,19 +15,20 @@ We enforce 100% branch coverage in any code merged.
 To create a new model, you must extend the `Model` class and add some fields to it.
 For example:
 ```typescript
-import Model, {property, fields} from 'breakdown-json-models'
+import ExampleEnum from 'example-enum';
+import {Model, property, StringField, ListField, EnumField, EmbeddedField} from 'breakdown-json-models'
 
 class TestModel extends Model {
-    @property(fields.StringField.create('The title').asRequired())
+    @property(StringField.create('The title').asRequired())
     public title: string;
 
-    @property(fields.ListField.of(fields.StringField.create('Some strings')))
+    @property(ListField.of(StringField.create('Some strings')))
     public strings: string[];
 
-    @property(fields.ListField.of(fields.EmbeddedField.of(TestModel, 'Some models')))
+    @property(ListField.of(EmbeddedField.of(TestModel, 'Some models')))
     public testModels: TestModel[];
 
-    @property(fields.EnumField.of(fields.ExampleEnum, 'An enum'))
+    @property(EnumField.of(ExampleEnum, 'An enum'))
     public state: ExampleEnum = ExampleEnum.TWO;
 
     constructor(properties?) {
