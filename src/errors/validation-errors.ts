@@ -13,7 +13,7 @@ export const fieldRequired = (key: string) =>
 
 export const invalidFormat = (key: string, givenValue: any, expectedFormat: string) =>
     new ValidationError(400, 'invalidFormat', 'The given value has an invalid format.',
-        {key, givenType: typeof givenValue, expectedFormat});
+        {key, givenValue, expectedFormat});
 
 export const invalidType = (key: string, givenValue: any) =>
     new ValidationError(400, 'invalidType', 'The given value has an invalid type.', {key, givenType: typeof givenValue});
