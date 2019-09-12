@@ -1,5 +1,5 @@
 import {Field} from '..';
-import Model from "../schema/model";
+import Model from '../schema/model';
 
 /**
  * Decorates a model property, making it delegate get and set methods to a

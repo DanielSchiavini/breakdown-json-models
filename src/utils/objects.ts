@@ -9,6 +9,10 @@ export interface Mapping<T> {
  * Runs the given function to each item in the object.
  * @param obj The object to iterate through.
  * @param fn The function to call.
+ * @typeparam TObj The type of the parameter `obj`.
+ * @typeparam TIn The the type of the properties for which the @param fn will be applied.
+ * @typeparam TOut The type of the output of the parameter `fn`.
+ * @typeparam TKey The keys of type parameter `TObj`
  */
 export function forEachObject<TObj, TIn, TOut, TKey extends keyof TObj>(
     obj: Record<TKey, TIn>, fn: (value: TIn, key: TKey) => any
@@ -21,6 +25,10 @@ export function forEachObject<TObj, TIn, TOut, TKey extends keyof TObj>(
  * If the function returns null or undefined, the resulting object will not have that key.
  * @param obj The object to iterate through.
  * @param fn The function to call.
+ * @typeparam TObj The type of the parameter `obj`.
+ * @typeparam TIn The the type of the properties for which the @param fn will be applied.
+ * @typeparam TOut The type of the output of the parameter `fn`.
+ * @typeparam TKey The keys of type parameter `TObj`
  * @return An object with the results of the function calls.
  */
 export function mapObject<TObj extends {}, TIn, TOut, TKey extends keyof TObj>(
@@ -41,10 +49,10 @@ export function mapObject<TObj extends {}, TIn, TOut, TKey extends keyof TObj>(
  * This is similar to {@link mapObject} but it allows for new keys in the resulting object.
  * @param obj The object to iterate through.
  * @param fn The function to call. It should return a tuple with the new key and new value.
- * @typeparam TObjIn The type of the @param obj.
+ * @typeparam TObjIn The type of the parameter `obj`.
  * @typeparam TIn The the type of the properties for which the @param fn will be applied.
- * @typeparam TOut The type of the output of the @param fn.
- * @typeparam TKeyIn The keys of @typeparam TObjIn
+ * @typeparam TOut The type of the output of the parameter `fn`.
+ * @typeparam TKeyIn The keys of type param `TObjIn`
  * @typeparam TKeyOut The keys of the output.
  * @return An object with the results of the function calls.
  */

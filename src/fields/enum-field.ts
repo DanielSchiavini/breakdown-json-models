@@ -5,13 +5,17 @@ export type EnumValue = string | number | symbol;
 
 /**
  * Class responsible for validating enum fields.
+ * @typeparam T The type of the enum.
+ * @typeparam K The type of the enum keys.
+ * @typeparam V The type of the enum values.
  */
 export default class EnumField<T extends {[P in keyof T]: V}, K extends keyof T, V extends EnumValue>
     extends Field<K, V> {
+
     /** A mapping of the enum values to their respective keys. */
     private readonly valueToKey: Record<V, K>;
 
-    private constructor(private enumType: Record<K, V>, description: string) {
+    private constructor(private enumType: T, description: string) {
         super(description);
         this.valueToKey = transformObject(enumType, (value: V, key: K) => [value, key]);
     }
@@ -20,10 +24,14 @@ export default class EnumField<T extends {[P in keyof T]: V}, K extends keyof T,
      * Creates a new enum field for the given enum type.
      * @param enumType The type of the enum.
      * @param description The description of the field.
+     * @typeparam T The type of the enum.
+     * @typeparam K The type of the enum keys.
+     * @typeparam V The type of the enum values.
      * @return The created field.
      */
-    static of<T extends {[P in keyof T]: V}, K extends keyof T, V extends EnumValue>
-    (enumType: Record<K, EnumValue>, description: string) {
+    static of<T extends {[P in keyof T]: V}, K extends keyof T, V extends EnumValue>(
+        enumType: T, description: string
+    ) {
         return new EnumField<T, K, EnumValue>(enumType, description);
     }
 
