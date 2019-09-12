@@ -1,15 +1,19 @@
-import {Field, invalidEnumValue, Mapping, transformObject} from '..';
+import {Field, invalidEnumValue, transformObject} from '..';
+
+
+export type EnumValue = string | number | symbol;
 
 /**
  * Class responsible for validating enum fields.
  */
-export default class EnumField<T> extends Field<string, T> {
+export default class EnumField<T extends {[P in keyof T]: V}, K extends keyof T, V extends EnumValue>
+    extends Field<K, V> {
     /** A mapping of the enum values to their respective keys. */
-    private readonly valueToKey: Mapping<string>;
+    private readonly valueToKey: Record<V, K>;
 
-    private constructor(private enumType: any, description: string) {
+    private constructor(private enumType: Record<K, V>, description: string) {
         super(description);
-        this.valueToKey = transformObject(enumType, (value, key) => [value.toString(), key]);
+        this.valueToKey = transformObject(enumType, (value: V, key: K) => [value, key]);
     }
 
     /**
@@ -18,8 +22,9 @@ export default class EnumField<T> extends Field<string, T> {
      * @param description The description of the field.
      * @return The created field.
      */
-    static of<T>(enumType: any, description: string) {
-        return new EnumField<T>(enumType, description);
+    static of<T extends {[P in keyof T]: V}, K extends keyof T, V extends EnumValue>
+    (enumType: Record<K, EnumValue>, description: string) {
+        return new EnumField<T, K, EnumValue>(enumType, description);
     }
 
     /**
@@ -29,13 +34,12 @@ export default class EnumField<T> extends Field<string, T> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    set(key: string, value: string | T): T {
-        if (this.valueToKey.hasOwnProperty(value as string)) {
-            return value as T;
+    set(key: string, value: K | V): V {
+        if (this.valueToKey.hasOwnProperty(value)) {
+            return value as V;
         }
-        if (this.enumType.hasOwnProperty(value as string)) {
-            value = this.enumType[value];
-            return value as T;
+        if (this.enumType.hasOwnProperty(value)) {
+            return this.enumType[value as K];
         }
         throw invalidEnumValue(key, value);
     }
@@ -47,7 +51,7 @@ export default class EnumField<T> extends Field<string, T> {
      * @return The parsed value.
      * @throws ValidationError
      */
-    serialize(key: string, value: T): string {
+    serialize(key: string, value: V): K {
         return this.valueToKey[value.toString()];
     }
 }
