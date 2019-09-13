@@ -8,7 +8,6 @@ enum ExampleEnum {
     TWO = 'two',
 }
 
-
 class TestModel extends Model {
     @property(StringField.create('The title').asRequired().withRegex(/[\w ]+/))
     public title: string;
@@ -39,7 +38,7 @@ class TestModel extends Model {
 
 class AnotherTestModel extends Model {
     @property(ListField.of(EnumField.of(ExampleEnum, 'A list of enums')))
-    public state: ExampleEnum;
+    public state: ExampleEnum[];
 
     @property(StringField.create('A description field'))
     public description = 'default description';
