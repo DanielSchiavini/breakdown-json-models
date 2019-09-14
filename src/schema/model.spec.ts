@@ -9,7 +9,7 @@ enum ExampleEnum {
 }
 
 class TestModel extends Model {
-    @property(StringField.create('The title').asRequired().withRegex(/[\w ]+/))
+    @property(StringField.create('The title').withRegex(/[\w ]+/).asRequired())
     public title: string;
 
     @property(ListField.of(StringField.create('Some strings')))
@@ -25,10 +25,10 @@ class TestModel extends Model {
     public state: ExampleEnum = ExampleEnum.TWO;
 
     @property(DateField.create('A date'))
-    public date: Date;
+    public date?: Date;
 
     @property(UrlField.create('An url'))
-    public url: string;
+    public url?: string;
 
     constructor(properties?) {
         super();
