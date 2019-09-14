@@ -27,7 +27,7 @@ export default abstract class Field<TExternal, TInternal = TExternal> {
      * Marks this field as required.
      * @return this
      */
-    asRequired(): Field<TExternal, TInternal> {
+    asRequired(): this {
         this.options.required = true;
         return this;
     }
