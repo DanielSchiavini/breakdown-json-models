@@ -4,7 +4,9 @@
 import {fieldRequired} from '..';
 
 /**
- *
+ * The base class for all fields.
+ * @typeparam TExternal The type used when the field is serialized.
+ * @typeparam TInternal The type used when the field is used internally (it must match the class property).
  */
 export default abstract class Field<TExternal, TInternal = TExternal> {
     /**
@@ -25,7 +27,7 @@ export default abstract class Field<TExternal, TInternal = TExternal> {
      * Marks this field as required.
      * @return this
      */
-    asRequired(): this {
+    asRequired(): Field<TExternal, TInternal> {
         this.options.required = true;
         return this;
     }

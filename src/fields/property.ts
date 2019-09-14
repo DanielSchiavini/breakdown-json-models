@@ -17,6 +17,6 @@ export default <TExternal, TInternal>(field: Field<TExternal, TInternal>) =>
      * @param key The key of the property.
      */
     <TModel extends {}, TKey extends keyof TModel>
-    (target: Model & Record<TKey, TInternal>, key: TKey): void => {
+    (target: Model & Partial<Record<TKey, TInternal>>, key: TKey): void => {
         target.addField(key as string, field);
     };
